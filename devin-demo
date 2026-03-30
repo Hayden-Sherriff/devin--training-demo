@@ -1,0 +1,7 @@
+echo "# devin--training-demo" >> README.md
+git init
+git add README.md
+git commit -m "first commit"
+git branch -M main
+git remote add origin https://github.com/Hayden-Sherriff/devin--training-demo.git
+git push -u origin main
