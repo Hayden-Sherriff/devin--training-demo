@@ -22,13 +22,14 @@ export interface LessonContent {
 
 export interface Exercise {
   id: string;
-  type: 'prompt-writing' | 'multiple-choice' | 'comparison' | 'freeform';
+  type: 'prompt-writing' | 'multiple-choice' | 'comparison' | 'freeform' | 'scenario';
   question: string;
   hint?: string;
   idealAnswer?: string;
   options?: string[];
   correctOption?: number;
   explanation?: string;
+  scenario?: string;
 }
 
 export interface Module {
@@ -104,6 +105,14 @@ export const tracks: Track[] = [
                 question: 'Write a task description asking Devin to add input validation to a signup form. Be specific about what fields need validation and what rules to apply.',
                 hint: 'Think about: which fields, what validation rules, error message style, and where the form lives in the codebase.',
                 idealAnswer: 'Add input validation to the signup form in src/components/SignupForm.tsx. Validate: email (must be valid format), password (min 8 chars, at least one number and one uppercase letter), and username (3-20 chars, alphanumeric only). Show inline error messages below each field in red text. Prevent form submission until all fields are valid.'
+              },
+              {
+                id: 'ex-what-is-devin-3',
+                type: 'scenario',
+                question: 'Write the prompt you would give to Devin for this scenario.',
+                scenario: 'Your team just launched a new e-commerce app but users are reporting that the checkout page crashes when they apply a discount code. You\'ve narrowed it down to the discount calculation logic but don\'t have time to fix it yourself.',
+                hint: 'Include the symptom, where to look, what the expected behavior is, and mention testing.',
+                idealAnswer: 'Fix the crash on the checkout page when users apply a discount code. The issue is in src/utils/discountCalculator.ts — the calculateDiscount() function throws when the discount percentage is 100% (division by zero). Expected behavior: 100% discount should set the total to $0.00 without crashing. Also handle edge cases: negative discount values, discount > 100%, and empty discount code. Add unit tests in src/utils/__tests__/discountCalculator.test.ts covering these edge cases.'
               }
             ],
             tips: [
@@ -155,6 +164,21 @@ export const tracks: Track[] = [
                 ],
                 correctOption: 2,
                 explanation: 'Devin does not have automatic access to production systems. You must explicitly provide credentials and access, following the principle of least privilege.'
+              },
+              {
+                id: 'ex-capabilities-2',
+                type: 'prompt-writing',
+                question: 'Write a prompt asking Devin to set up a CI/CD pipeline for a React project. Include what checks should run and what tools to use.',
+                hint: 'Think about linting, testing, building, and deployment. Mention the CI platform and specific commands.',
+                idealAnswer: 'Set up a GitHub Actions CI/CD pipeline in .github/workflows/ci.yml for our React project. The pipeline should:\n1. Trigger on push to main and on pull requests\n2. Run npm install, then npm run lint (ESLint), npm run typecheck (TypeScript), and npm test (Jest)\n3. Build the project with npm run build\n4. If on main branch and all checks pass, deploy to Vercel using the existing VERCEL_TOKEN secret\nUse Node.js 20 and cache npm dependencies for faster runs.'
+              },
+              {
+                id: 'ex-capabilities-3',
+                type: 'scenario',
+                question: 'Write the prompt you would give to Devin for this scenario.',
+                scenario: 'You inherited a legacy codebase with no documentation. The README is empty, there are no comments in the code, and new team members struggle to understand the project structure. You want Devin to help.',
+                hint: 'Think about what kind of documentation would be most useful and what Devin should analyze to create it.',
+                idealAnswer: 'Analyze this codebase and create comprehensive documentation:\n1. Generate a README.md with: project overview, tech stack, setup instructions (based on package.json scripts), and architecture overview\n2. Create a CONTRIBUTING.md with development workflow, coding conventions (infer from existing code patterns), and PR guidelines\n3. Add JSDoc comments to all exported functions in src/services/ and src/utils/\n4. Create an ARCHITECTURE.md documenting the folder structure, key modules, and data flow between components\nBase everything on the actual code — don\'t make assumptions.'
               }
             ],
             tips: [
@@ -205,6 +229,21 @@ export const tracks: Track[] = [
                 ],
                 correctOption: 1,
                 explanation: 'The Desktop tab lets you watch Devin\'s screen live, so you can see exactly what it\'s doing \u2014 browsing, coding, running commands, etc.'
+              },
+              {
+                id: 'ex-interface-2',
+                type: 'prompt-writing',
+                question: 'You just started a new Devin session for a React project. Write the initial setup message you would send, including context about the repo and what you want Devin to work on.',
+                hint: 'Think about what Devin needs to know upfront: the repo, the tech stack, the specific task, and any conventions.',
+                idealAnswer: 'This is a React 18 + TypeScript project using Tailwind CSS for styling. The repo is organized with components in src/components/, pages in src/pages/, and API utilities in src/lib/api.ts.\n\nTask: Add a user profile page at /profile that shows the currently logged-in user\'s information. Fetch user data from the GET /api/me endpoint (already implemented in the backend). Display: avatar, name, email, and join date. Follow the same page layout pattern used in src/pages/Dashboard.tsx. Add a loading skeleton while data fetches.'
+              },
+              {
+                id: 'ex-interface-3',
+                type: 'scenario',
+                question: 'Write the prompt you would give to Devin for this scenario.',
+                scenario: 'You\'re watching Devin work via the Desktop tab. You notice it\'s installing a different CSS framework (Bootstrap) instead of using Tailwind CSS, which your project uses. Devin is already 5 minutes into the session. You need to redirect it without starting over.',
+                hint: 'Be specific about what to stop doing, what to use instead, and point to existing examples.',
+                idealAnswer: 'Stop \u2014 please don\'t use Bootstrap. Our project uses Tailwind CSS. Please:\n1. Remove the Bootstrap dependency you just installed (npm uninstall bootstrap react-bootstrap)\n2. Redo the component styling using Tailwind utility classes\n3. Look at src/components/Card.tsx and src/components/Button.tsx for examples of our Tailwind styling patterns\n4. Use our custom color tokens defined in tailwind.config.js (e.g., primary-500, gray-100)'
               }
             ],
             tips: [
@@ -268,6 +307,21 @@ export const tracks: Track[] = [
                 ],
                 correctOption: 1,
                 explanation: 'The second prompt is far more effective because it identifies the specific slow function, quantifies the problem, suggests concrete solutions, and points to existing infrastructure to use.'
+              },
+              {
+                id: 'ex-prompting-3',
+                type: 'scenario',
+                question: 'Write the prompt you would give to Devin for this scenario.',
+                scenario: 'Your mobile app\'s API returns user data that includes sensitive fields (SSN, credit card numbers) in every response. You need Devin to add field-level filtering so the API only returns fields the client needs.',
+                hint: 'Think about where the filtering should happen, what fields to allow/block, and how to make it configurable.',
+                idealAnswer: 'Add response field filtering to our user API endpoints in src/routes/users.ts. Currently, the GET /api/users and GET /api/users/:id endpoints return all database fields including sensitive ones.\n\n1. Create a field filter middleware in src/middleware/fieldFilter.ts that accepts a whitelist of allowed fields per endpoint\n2. Remove these fields from ALL user responses: ssn, credit_card_number, bank_account\n3. Add a ?fields= query parameter to let clients request specific fields (e.g., ?fields=name,email,avatar)\n4. Default allowed fields: id, name, email, avatar, created_at, role\n5. Add tests to verify sensitive fields are never leaked, even if explicitly requested via ?fields='
+              },
+              {
+                id: 'ex-prompting-4',
+                type: 'prompt-writing',
+                question: 'Rewrite this bad prompt into a great one: "Add error handling to the app"',
+                hint: 'Think about: what kind of errors, where in the app, how errors should be displayed, and what the user experience should be.',
+                idealAnswer: 'Add a global error boundary and error handling to our React app:\n1. Create an ErrorBoundary component in src/components/ErrorBoundary.tsx that catches React rendering errors and shows a friendly "Something went wrong" page with a "Reload" button\n2. Wrap the app\'s router in App.tsx with this ErrorBoundary\n3. Add error handling to all API calls in src/lib/api.ts: catch network errors, 401 (redirect to /login), 403 (show "Access Denied"), 404 (show "Not Found"), and 5xx (show "Server Error" with retry button)\n4. Create a toast notification system in src/components/Toast.tsx for non-critical errors\n5. Follow the existing UI patterns in src/components/Alert.tsx for styling'
               }
             ],
             tips: [
@@ -327,6 +381,21 @@ export const tracks: Track[] = [
                 question: 'You notice Devin used the wrong CSS framework in its implementation. Write a feedback message to correct this.',
                 hint: 'Be specific about what was used vs. what should be used, and point to examples.',
                 idealAnswer: 'Please use Tailwind CSS classes instead of inline styles. Our project uses Tailwind throughout \u2014 see src/components/Button.tsx for an example of our styling conventions. Replace the inline style={{ padding: "8px 16px" }} with className="px-4 py-2" and similarly for all other inline styles in the new components.'
+              },
+              {
+                id: 'ex-assigning-3',
+                type: 'scenario',
+                question: 'Write the prompt you would give to Devin for this scenario.',
+                scenario: 'Your product manager just assigned you a Jira ticket: "As a user, I want to receive email notifications when someone comments on my post." Your backend already has an email service and a comments API. You want to delegate this to Devin.',
+                hint: 'Include the full context: what exists already, where the code lives, what the notification should contain, and edge cases.',
+                idealAnswer: 'Implement email notifications for post comments.\n\nContext: When a user comments on a post (POST /api/posts/:id/comments in src/routes/comments.ts), send an email notification to the post author.\n\nRequirements:\n1. Use the existing email service in src/services/email.ts (sendEmail function)\n2. Email template: Subject "[PostTitle] - New comment from [CommenterName]", body should include the comment text and a link to the post\n3. Don\'t send notification if the commenter is the post author\n4. Don\'t send if the post author has notifications disabled (check user.preferences.emailNotifications in the User model)\n5. Send asynchronously \u2014 don\'t block the comment API response\n6. Add tests covering: notification sent, self-comment skipped, notifications disabled, email service failure handled gracefully'
+              },
+              {
+                id: 'ex-assigning-4',
+                type: 'prompt-writing',
+                question: 'Write a prompt for Devin to review your PR before a human reviewer sees it. What should Devin check for?',
+                hint: 'Think about code quality, security, performance, and consistency with project conventions.',
+                idealAnswer: 'Review PR #42 on our repo. Check for:\n1. Security issues: exposed secrets, SQL injection, XSS vulnerabilities, missing auth checks\n2. Performance: N+1 queries, missing database indexes, unnecessary re-renders in React components\n3. Code quality: unused imports, duplicate code, functions over 50 lines, missing error handling\n4. Convention compliance: does it follow the patterns in our existing codebase? Check naming conventions, file organization, and TypeScript types (no \'any\' types)\n5. Test coverage: are all new functions tested? Are edge cases covered?\n6. Leave specific comments on any issues found, with suggestions for fixes.'
               }
             ],
             tips: [
@@ -379,6 +448,21 @@ export const tracks: Track[] = [
                 question: 'You need to add a notification system to your app (email + in-app notifications). Break this into 3 focused sessions for Devin.',
                 hint: 'Think about the logical layers: data model, delivery mechanism, and user interface.',
                 idealAnswer: 'Session 1: Create the notifications data model. Add a notifications table with columns: id, user_id, type (email/in-app), title, body, read (boolean), created_at. Create the migration and the Notification model in src/models/.\n\nSession 2: Build the notification service in src/services/notifications.ts. Implement: createNotification(), markAsRead(), getUserNotifications(userId, { unreadOnly }). For email type, integrate with the existing email service in src/services/email.ts.\n\nSession 3: Add a notification bell icon to the header (src/components/Header.tsx) showing unread count. Create a dropdown panel listing recent notifications. Clicking a notification marks it as read and navigates to the relevant page.'
+              },
+              {
+                id: 'ex-breakdown-2',
+                type: 'scenario',
+                question: 'Write the prompt you would give to Devin for this scenario.',
+                scenario: 'Your company wants to add a full-text search feature across products, blog posts, and user profiles. This is too complex for a single session. Write the prompt for the FIRST session only \u2014 the foundational setup.',
+                hint: 'Focus on infrastructure first. What search technology to use, how to index data, and a simple proof-of-concept.',
+                idealAnswer: 'Set up the search infrastructure for our application.\n\n1. Install and configure Elasticsearch (or use the existing Docker setup in docker-compose.yml \u2014 add an Elasticsearch service)\n2. Create a search service in src/services/search.ts with:\n   - initializeIndex(indexName, mapping) function\n   - indexDocument(indexName, id, doc) function\n   - search(indexName, query, options) function\n3. Create an index mapping for products as a proof-of-concept with fields: name (text), description (text), category (keyword), price (float)\n4. Add a one-time migration script in scripts/reindex-products.ts that reads all products from the database and indexes them in Elasticsearch\n5. Add a basic GET /api/search?q=query endpoint in src/routes/search.ts that searches the products index\n6. Tests: verify indexing a document and searching for it returns results'
+              },
+              {
+                id: 'ex-breakdown-3',
+                type: 'prompt-writing',
+                question: 'Your team wants to migrate from REST to GraphQL. Write session prompts for the first 2 of 4 planned sessions.',
+                hint: 'Think about what needs to come first: schema setup and one working query, before migrating all endpoints.',
+                idealAnswer: 'Session 1 \u2014 GraphQL Foundation:\nSet up Apollo Server in our Express app. Add apollo-server-express to package.json. Create the GraphQL entry point in src/graphql/index.ts. Define the User type and a basic Query { me: User } that returns the authenticated user. Mount the GraphQL endpoint at /graphql. Add the Apollo Playground for development. Keep all existing REST endpoints working \u2014 this is additive, not a replacement yet. Test the /graphql endpoint with a simple query.\n\nSession 2 \u2014 Core Queries:\nMigrate the 3 most-used REST endpoints to GraphQL resolvers:\n1. GET /api/users \u2192 Query { users(limit, offset): [User] }\n2. GET /api/posts \u2192 Query { posts(limit, cursor): PostConnection }\n3. GET /api/posts/:id \u2192 Query { post(id): Post }\nPut resolvers in src/graphql/resolvers/ and type definitions in src/graphql/typeDefs/. Reuse existing service layer functions from src/services/ \u2014 don\'t duplicate database logic.'
               }
             ],
             tips: [
@@ -444,6 +528,21 @@ export const tracks: Track[] = [
                 ],
                 correctOption: 1,
                 explanation: 'Providing the exact error, location, and likely cause gives Devin the context it needs to make a targeted fix rather than guessing.'
+              },
+              {
+                id: 'ex-debug-3',
+                type: 'scenario',
+                question: 'Write the prompt you would give to Devin for this scenario.',
+                scenario: 'Devin created a PR that adds a new API endpoint. The endpoint works in manual testing, but the automated tests are failing with "ECONNREFUSED" errors. You suspect the test setup isn\'t starting the test server properly.',
+                hint: 'Include the error, where tests are configured, what you think the root cause is, and what to check.',
+                idealAnswer: 'The new tests in src/routes/__tests__/preferences.test.ts are failing with "ECONNREFUSED 127.0.0.1:3000". The endpoint works fine when tested manually.\n\nI think the issue is that the test file is not using our test setup correctly. Please:\n1. Check src/test/setup.ts \u2014 we use a beforeAll() that starts a test server on a random port\n2. Make sure the new test file imports and uses the test setup helper from src/test/helpers.ts (see src/routes/__tests__/users.test.ts for the correct pattern)\n3. The test should use the testClient helper instead of hardcoded localhost:3000\n4. Run the test suite to verify all tests pass: npm test -- --testPathPattern=preferences'
+              },
+              {
+                id: 'ex-debug-4',
+                type: 'prompt-writing',
+                question: 'Devin\'s implementation has a subtle bug: the search results page shows stale data after the user updates a record. Write a debugging prompt that helps Devin fix the caching issue.',
+                hint: 'Identify the symptom, the likely cause (caching), and what the fix should be.',
+                idealAnswer: 'There\'s a stale data bug on the search results page (src/pages/SearchResults.tsx). When a user edits a record and goes back to search results, the old data still shows until a hard refresh.\n\nLikely cause: The search results are cached by React Query in src/hooks/useSearch.ts with a staleTime of Infinity. After mutations in src/hooks/useRecords.ts, the search cache isn\'t being invalidated.\n\nFix: In the updateRecord mutation\'s onSuccess callback in src/hooks/useRecords.ts, add queryClient.invalidateQueries({ queryKey: [\'search\'] }) to bust the search cache. Also reduce staleTime from Infinity to 30000 (30 seconds) as a safety net. Add a test that verifies search results update after a record mutation.'
               }
             ],
             tips: [
@@ -493,6 +592,21 @@ export const tracks: Track[] = [
                 question: 'Devin built a search feature but it\'s searching only by title. You also need it to search by description, tags, and author. Write an iteration prompt.',
                 hint: 'Be specific about what fields to add and any relevance ranking preferences.',
                 idealAnswer: 'Please update the search in src/services/search.ts to also search across these fields: description (partial match), tags (exact match on any tag), and author.name (partial match). Rank results with title matches first, then description, then author, then tags. Keep the existing debounce and pagination logic unchanged.'
+              },
+              {
+                id: 'ex-iterate-2',
+                type: 'scenario',
+                question: 'Write the prompt you would give to Devin for this scenario.',
+                scenario: 'Devin built a data table component. It works, but: (1) the column widths are uneven, (2) there\'s no loading state, (3) clicking a row should navigate to the detail page but it doesn\'t, and (4) the empty state just shows a blank area. You want to iterate without starting over.',
+                hint: 'Number each change clearly and reference existing components for consistency.',
+                idealAnswer: 'The DataTable component in src/components/DataTable.tsx needs these 4 improvements:\n\n1. Column widths: Set explicit widths \u2014 Name (30%), Email (25%), Role (15%), Status (15%), Actions (15%). Use the same table layout pattern as src/components/UserTable.tsx\n2. Loading state: Add a skeleton loader while data is fetching. Use 5 rows of animated placeholder bars matching the column widths. See src/components/Skeleton.tsx for our skeleton component.\n3. Row click: Make each row clickable \u2014 clicking should navigate to /records/{id} using react-router\'s useNavigate(). Add cursor-pointer and hover:bg-gray-50 styles.\n4. Empty state: When data is empty, show our EmptyState component from src/components/EmptyState.tsx with message "No records found" and a "Create Record" CTA button.'
+              },
+              {
+                id: 'ex-iterate-3',
+                type: 'prompt-writing',
+                question: 'Devin created a login form but forgot to add: password visibility toggle, "remember me" checkbox, and a "forgot password" link. Write a concise iteration prompt with all three changes.',
+                hint: 'Reference specific components and explain where each element should go in the form.',
+                idealAnswer: 'Please add these 3 items to the login form in src/pages/Login.tsx:\n\n1. Password visibility toggle: Add an eye icon button (use the Eye/EyeOff icons from lucide-react) inside the password input field. Clicking it should toggle between type="password" and type="text".\n2. "Remember me" checkbox: Add below the password field using our existing Checkbox component from src/components/ui/Checkbox.tsx. When checked, store the auth token in localStorage instead of sessionStorage.\n3. "Forgot password?" link: Add below the remember-me checkbox, right-aligned. Link to /forgot-password. Style with text-sm text-blue-600 hover:underline.'
               }
             ],
             tips: [
@@ -544,6 +658,21 @@ export const tracks: Track[] = [
                 question: 'Write a SKILL.md file content for a Node.js/Express project that uses PostgreSQL and Jest for testing.',
                 hint: 'Include: how to run the project, testing conventions, database setup, and coding standards.',
                 idealAnswer: '# Project Skills\n\n## Running the Project\n- Start dev server: `npm run dev` (runs on port 3000)\n- Run tests: `npm test` (uses Jest)\n- Lint: `npm run lint` (ESLint + Prettier)\n\n## Database\n- PostgreSQL with Prisma ORM\n- Run migrations: `npx prisma migrate dev`\n- Seed data: `npm run seed`\n\n## Conventions\n- Use async/await, never callbacks\n- All API responses follow { data, error, meta } format\n- Routes go in src/routes/, services in src/services/\n- Every new endpoint needs integration tests\n- Use the existing error handling middleware \u2014 throw AppError instances'
+              },
+              {
+                id: 'ex-project-2',
+                type: 'scenario',
+                question: 'Write the prompt you would give to Devin for this scenario.',
+                scenario: 'You just joined a new company and need to set up a Next.js project from scratch for your team. You want Devin to bootstrap the entire project with your team\'s preferred tools and conventions.',
+                hint: 'Be specific about the tech stack, folder structure, linting rules, and initial pages.',
+                idealAnswer: 'Create a new Next.js 14 project with the App Router. Set up the following:\n\nTech stack: TypeScript, Tailwind CSS, Prisma (PostgreSQL), NextAuth.js for auth, Zod for validation\n\nFolder structure:\n- app/ (Next.js App Router pages)\n- components/ui/ (reusable UI components)\n- lib/ (utilities, database client, auth config)\n- services/ (business logic)\n- types/ (shared TypeScript types)\n\nInitial setup:\n1. Configure ESLint with @typescript-eslint and Prettier\n2. Add a Dockerfile and docker-compose.yml with PostgreSQL\n3. Set up Prisma with an initial User model (id, email, name, role, createdAt)\n4. Create a basic layout with header, sidebar, and main content area\n5. Add a landing page, login page, and dashboard page\n6. Configure CI with GitHub Actions (lint, typecheck, build)\n7. Add a README with setup instructions'
+              },
+              {
+                id: 'ex-project-3',
+                type: 'prompt-writing',
+                question: 'Write an environment configuration (initialize + maintenance sections) for a Python FastAPI project that uses Poetry and PostgreSQL.',
+                hint: 'Think about what tools need to be installed once vs. what runs every session.',
+                idealAnswer: 'initialize: |\n  curl -sSL https://install.python-poetry.org | python3 -\n  sudo apt-get update && sudo apt-get install -y postgresql-client\n\nmaintenance: |\n  poetry install\n  poetry run alembic upgrade head\n\nknowledge:\n  - name: lint\n    contents: poetry run ruff check . && poetry run mypy src/\n  - name: test\n    contents: poetry run pytest -v\n  - name: startup\n    contents: poetry run uvicorn src.main:app --reload --port 8000'
               }
             ],
             tips: [
@@ -597,6 +726,14 @@ export const tracks: Track[] = [
                 question: 'You need to add internationalization (i18n) to 10 pages of your app. Design a parallelization strategy using Devin sessions.',
                 hint: 'Think about what can be done in parallel vs. what needs to be sequential.',
                 idealAnswer: 'Session 1 (Sequential - do this first): Set up the i18n infrastructure. Install react-i18next, create the i18n config in src/lib/i18n.ts, set up the language detection and fallback logic, and create the translation file structure (src/locales/en/, src/locales/es/). Create a sample translation for the Home page as a reference pattern.\n\nSessions 2-6 (Parallel - after session 1 completes): Each session takes 2 pages and extracts all hardcoded strings into translation keys, following the pattern established in session 1.\n\nSession 7 (Sequential - after 2-6 complete): Add the language switcher component to the header, integrate all translations, and run the full test suite to verify nothing broke.'
+              },
+              {
+                id: 'ex-parallel-2',
+                type: 'scenario',
+                question: 'Write the prompt you would give to Devin for this scenario.',
+                scenario: 'Your startup needs to launch in 2 days. You have 4 critical features left to build: (1) Stripe payment integration, (2) email verification flow, (3) admin dashboard, and (4) user onboarding tour. You want to parallelize as much as possible.',
+                hint: 'Think about dependencies between features. Which features can be built independently? Which ones depend on each other?',
+                idealAnswer: 'Here\'s my parallelization plan for 4 features:\n\nWave 1 (run simultaneously):\n\nSession A \u2014 Stripe Payment:\nIntegrate Stripe Checkout in src/services/payment.ts. Add POST /api/checkout/session to create a Checkout session, and POST /api/webhooks/stripe to handle payment.succeeded events. Use the existing STRIPE_SECRET_KEY secret. Add a pricing page at /pricing with 3 plan tiers. Store subscription status in the users table (add a plan column).\n\nSession B \u2014 Email Verification:\nAdd email verification flow. On signup, send a verification email with a unique token (store in email_verifications table). Add GET /api/verify-email?token=xxx endpoint. Block unverified users from accessing protected routes. Use the existing email service in src/services/email.ts.\n\nSession C \u2014 Admin Dashboard:\nCreate an admin dashboard at /admin (guard with role === "admin" check). Show: total users, revenue chart (mock data for now), recent signups table, and active subscriptions count. Follow existing page patterns in src/pages/.\n\nWave 2 (after Wave 1 merges):\n\nSession D \u2014 Onboarding Tour:\nAdd a guided onboarding tour using react-joyride for new users. Steps: welcome modal, highlight sidebar nav, show how to create first project, point to settings. Store completion status in user.preferences.onboardingCompleted. Only show for users who signed up in the last 24 hours.'
               }
             ],
             tips: [
@@ -661,6 +798,21 @@ export const tracks: Track[] = [
                 ],
                 correctOption: 1,
                 explanation: 'A comprehensive CI pipeline acts as an automated quality gate. If Devin\'s code passes lint, tests, and type-checking, you can be much more confident in the output without manual review of every line.'
+              },
+              {
+                id: 'ex-autonomy-2',
+                type: 'prompt-writing',
+                question: 'Write a Devin playbook for the recurring task of "adding a new API endpoint" in your Express/TypeScript project. The playbook should be reusable for any endpoint.',
+                hint: 'Think about the standard steps: route file, controller, validation, tests, documentation. Use placeholders for specifics.',
+                idealAnswer: 'Playbook: Add New API Endpoint\n\n1. Create the route file at src/routes/[resource].ts following the pattern in src/routes/users.ts\n2. Add request validation using Zod schemas in src/validators/[resource].ts\n3. Create the service layer in src/services/[resource].ts for business logic\n4. Add the route to the Express app in src/app.ts\n5. Write integration tests in src/routes/__tests__/[resource].test.ts covering: success case, validation errors (400), not found (404), and unauthorized (401)\n6. Add the endpoint to the API documentation in docs/api.md\n7. Run npm test and npm run lint before creating the PR\n\nConventions:\n- Use async/await error handling with the asyncHandler wrapper\n- Return responses in { data, meta } format\n- Use HTTP status codes consistently: 200 (get), 201 (create), 204 (delete)'
+              },
+              {
+                id: 'ex-autonomy-3',
+                type: 'scenario',
+                question: 'Write the prompt you would give to Devin for this scenario.',
+                scenario: 'You want to set up Devin to automatically handle incoming bug reports from Linear. When a bug is assigned to Devin, it should investigate the issue, attempt a fix, and create a PR. Write the playbook/instructions for how Devin should handle these.',
+                hint: 'Think about the investigation steps, safety guardrails, and when Devin should ask for help vs. proceed autonomously.',
+                idealAnswer: 'When a bug report is assigned:\n\n1. Read the bug description and identify: the symptom, affected page/endpoint, and reproduction steps\n2. Search the codebase for the relevant files mentioned in the report\n3. Try to reproduce the issue by running the relevant tests or starting the dev server\n4. Investigate the root cause \u2014 check recent commits, related code, and error logs\n5. Implement a fix following existing code patterns\n6. Add or update tests to cover the bug scenario (the test should fail without the fix)\n7. Run the full test suite to ensure no regressions\n8. Create a PR with: description of root cause, what was changed, and how it was tested\n\nGuardrails:\n- DO NOT modify database schemas without asking\n- DO NOT change public API contracts without asking\n- If the bug involves auth/security, flag it for human review before merging\n- If you can\'t reproduce after 10 minutes, comment on the Linear ticket asking for more info'
               }
             ],
             tips: [
@@ -703,6 +855,21 @@ export const tracks: Track[] = [
                 question: 'Using the Constraint-First pattern, write a prompt asking Devin to add authentication middleware to your Express API.',
                 hint: 'Think about security constraints, existing patterns, and specific requirements.',
                 idealAnswer: 'DO NOT:\n- Modify existing route handlers\n- Use a new auth library (we already use jsonwebtoken)\n- Store tokens in localStorage (use httpOnly cookies)\n\nMUST:\n- Use the existing JWT_SECRET from environment variables\n- Return 401 for invalid/expired tokens with { error: "Unauthorized" }\n- Add the decoded user to req.user for downstream handlers\n\nSHOULD:\n- Skip auth for routes in the PUBLIC_ROUTES array in src/config/routes.ts\n- Log auth failures to our existing logger (src/lib/logger.ts)\n\nTask: Create an auth middleware in src/middleware/auth.ts and apply it to the Express app in src/app.ts. Add tests covering: valid token, expired token, missing token, and public route bypass.'
+              },
+              {
+                id: 'ex-patterns-2',
+                type: 'scenario',
+                question: 'Write the prompt you would give to Devin for this scenario.',
+                scenario: 'Your team has a React component library with 30+ components. You need to add Storybook stories for 5 components that don\'t have them yet. Use the Reference-Based pattern to make this efficient.',
+                hint: 'Point to an existing story as the reference pattern and specify exactly which components need stories.',
+                idealAnswer: 'Add Storybook stories for these 5 components that are missing them:\n1. src/components/Badge.tsx\n2. src/components/Tooltip.tsx\n3. src/components/Modal.tsx\n4. src/components/Tabs.tsx\n5. src/components/Avatar.tsx\n\nReference pattern: Follow the exact structure of src/components/Button.stories.tsx, which demonstrates our conventions:\n- Default export with component metadata and argTypes\n- Individual named exports for each variant (Default, Primary, Disabled, etc.)\n- Use the decorators array for layout wrapping\n- Add JSDoc descriptions for each story\n\nFor each component:\n- Create a story file at src/components/[ComponentName].stories.tsx\n- Include stories for all visual variants and interactive states\n- Add controls for all configurable props\n- Include a "Playground" story with all controls enabled'
+              },
+              {
+                id: 'ex-patterns-3',
+                type: 'prompt-writing',
+                question: 'Using the Acceptance Criteria pattern, write a prompt for adding a file upload feature to a web app.',
+                hint: 'Define clear, testable acceptance criteria that leave no room for ambiguity.',
+                idealAnswer: 'Implement file upload for user avatars in the profile settings page.\n\nAcceptance Criteria:\n- [ ] Upload button in src/pages/Settings.tsx accepts .jpg, .png, and .webp files only\n- [ ] Maximum file size is 5MB \u2014 show error toast for larger files\n- [ ] Image is previewed in a 128x128 circle before confirming upload\n- [ ] Upload to S3 via POST /api/upload endpoint in src/routes/upload.ts using the existing AWS SDK config in src/lib/aws.ts\n- [ ] Uploaded URL is saved to user.avatarUrl via PATCH /api/users/me\n- [ ] Old avatar is deleted from S3 when a new one is uploaded\n- [ ] Loading spinner shown during upload, button disabled\n- [ ] Tests: file too large, wrong format, successful upload, S3 error handling\n- [ ] No lint errors\n- [ ] PR description explains the implementation approach'
               }
             ],
             tips: [
@@ -778,6 +945,21 @@ export const tracks: Track[] = [
                 ],
                 correctOption: 1,
                 explanation: 'Start with one file to establish the migration pattern, review and refine, then parallelize. This catches issues early before they\'re multiplied across 50 files.'
+              },
+              {
+                id: 'ex-workflow-3',
+                type: 'scenario',
+                question: 'Write the prompt you would give to Devin for this scenario.',
+                scenario: 'Your SaaS app needs a complete onboarding flow for new users: welcome email, profile setup wizard, initial data import, and a guided product tour. Design the prompt for the profile setup wizard session.',
+                hint: 'Focus on one piece of the flow. Define the wizard steps, data to collect, validation, and where it fits in the existing app.',
+                idealAnswer: 'Build a multi-step profile setup wizard for new users.\n\nLocation: Create at src/pages/Onboarding.tsx, redirect to /onboarding after first login (check user.isOnboarded flag)\n\nWizard steps:\n1. "About You" \u2014 name, job title, company name, timezone (dropdown). All required.\n2. "Your Team" \u2014 invite team members via email (comma-separated). Optional, with "Skip" button.\n3. "Preferences" \u2014 theme (light/dark), default dashboard view (list/grid), email notification frequency (daily/weekly/never)\n4. "All Set!" \u2014 summary of choices with "Start Using App" button\n\nRequirements:\n- Use a step indicator at the top showing progress (Step 1 of 4)\n- "Back" and "Next" navigation buttons (no "Back" on step 1, "Finish" on step 4)\n- Persist draft progress to localStorage in case the user closes the tab\n- On finish, POST to /api/users/onboard with all collected data and set user.isOnboarded = true\n- Form validation using Zod schemas in src/validators/onboarding.ts\n- Use existing form components from src/components/ui/ (Input, Select, Button)\n- Add tests for each step\'s validation and the full submission flow'
+              },
+              {
+                id: 'ex-workflow-4',
+                type: 'prompt-writing',
+                question: 'Write a prompt for Devin to build a complete REST API for a blog platform. Include all the endpoints, data models, and requirements.',
+                hint: 'Think about CRUD operations, relationships between models, authentication, and pagination.',
+                idealAnswer: 'Build a REST API for a blog platform in our Express/TypeScript project.\n\nData models (add Prisma migrations):\n- Post: id, title, slug (unique, auto-generated from title), body (markdown), excerpt (first 200 chars of body), authorId (FK to User), status (draft/published), publishedAt, createdAt, updatedAt\n- Category: id, name, slug\n- PostCategory: postId, categoryId (many-to-many)\n- Comment: id, postId, authorId, body, createdAt\n\nEndpoints (in src/routes/):\n- GET /api/posts \u2014 list published posts, paginated (cursor-based, 20/page), filterable by ?category=slug\n- GET /api/posts/:slug \u2014 single post with author and comments\n- POST /api/posts \u2014 create post (auth required, author = req.user)\n- PATCH /api/posts/:id \u2014 update post (auth, must be author)\n- DELETE /api/posts/:id \u2014 soft delete (auth, must be author)\n- POST /api/posts/:id/comments \u2014 add comment (auth required)\n- GET /api/categories \u2014 list all categories\n\nConventions: follow existing patterns in src/routes/users.ts. Use asyncHandler wrapper. Return { data, meta } format. Add validation with Zod. Tests for each endpoint.'
               }
             ],
             tips: [
