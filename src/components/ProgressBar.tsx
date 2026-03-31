@@ -8,7 +8,7 @@ interface ProgressBarProps {
 export function ProgressBar({
   percentage,
   size = 'md',
-  color = 'bg-blue-600',
+  color = 'bg-gradient-to-r from-cognition-accent01 to-cognition-accent02',
   showLabel = false,
 }: ProgressBarProps) {
   const heights: Record<string, string> = {
@@ -19,14 +19,14 @@ export function ProgressBar({
 
   return (
     <div className="flex items-center gap-3 w-full">
-      <div className={`flex-1 bg-gray-100 rounded-full ${heights[size]} overflow-hidden`}>
+      <div className={`flex-1 bg-cognition-dark03 rounded-full ${heights[size]} overflow-hidden`}>
         <div
           className={`${color} ${heights[size]} rounded-full transition-all duration-500 ease-out`}
           style={{ width: `${Math.min(100, Math.max(0, percentage))}%` }}
         />
       </div>
       {showLabel && (
-        <span className="text-sm font-medium text-gray-600 min-w-[3rem] text-right">
+        <span className="text-sm font-medium text-cognition-grey02 min-w-[3rem] text-right">
           {percentage}%
         </span>
       )}

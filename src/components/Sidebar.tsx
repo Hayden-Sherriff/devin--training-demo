@@ -28,15 +28,15 @@ const trackIcons: Record<string, React.ReactNode> = {
 };
 
 const trackColors: Record<string, string> = {
-  beginner: 'text-emerald-600',
-  intermediate: 'text-blue-600',
-  advanced: 'text-purple-600',
+  beginner: 'text-cognition-accent02',
+  intermediate: 'text-cognition-accent01',
+  advanced: 'text-purple-400',
 };
 
 const trackBgColors: Record<string, string> = {
-  beginner: 'bg-emerald-50',
-  intermediate: 'bg-blue-50',
-  advanced: 'bg-purple-50',
+  beginner: 'bg-cognition-accent02/10',
+  intermediate: 'bg-cognition-accent01/10',
+  advanced: 'bg-purple-500/10',
 };
 
 export function Sidebar({ isOpen, onToggle }: SidebarProps) {
@@ -73,26 +73,26 @@ export function Sidebar({ isOpen, onToggle }: SidebarProps) {
       {/* Mobile toggle button */}
       <button
         onClick={onToggle}
-        className="fixed top-4 left-4 z-50 lg:hidden bg-white rounded-lg shadow-md p-2 hover:bg-gray-50"
+        className="fixed top-4 left-4 z-50 lg:hidden bg-cognition-dark02 rounded-lg shadow-md p-2 hover:bg-cognition-dark03 border border-cognition-dark03"
       >
         {isOpen ? <X className="w-5 h-5" /> : <Menu className="w-5 h-5" />}
       </button>
 
       {/* Sidebar */}
       <aside
-        className={`fixed top-0 left-0 h-full bg-white border-r border-gray-200 z-40 transition-transform duration-300 w-72 overflow-y-auto scrollbar-thin ${
+        className={`fixed top-0 left-0 h-full bg-cognition-dark02 border-r border-cognition-dark03 z-40 transition-transform duration-300 w-72 overflow-y-auto scrollbar-thin ${
           isOpen ? 'translate-x-0' : '-translate-x-full lg:translate-x-0'
         }`}
       >
         {/* Logo */}
-        <div className="p-6 border-b border-gray-100">
+        <div className="p-6 border-b border-cognition-dark03">
           <Link to="/" className="flex items-center gap-2.5">
-            <div className="w-8 h-8 bg-blue-600 rounded-lg flex items-center justify-center">
-              <Sparkles className="w-4 h-4 text-white" />
+            <div className="w-8 h-8 bg-gradient-to-br from-cognition-accent01 to-cognition-accent02 rounded-lg flex items-center justify-center">
+              <Sparkles className="w-4 h-4 text-cognition-dark01" />
             </div>
             <div>
-              <h1 className="text-lg font-bold text-gray-900">Devin Academy</h1>
-              <p className="text-xs text-gray-500">Training Platform</p>
+              <h1 className="text-lg font-semibold text-cognition-light01 font-heading tracking-wide">Devin Academy</h1>
+              <p className="text-xs text-cognition-grey02">Training Platform</p>
             </div>
           </Link>
         </div>
@@ -107,8 +107,8 @@ export function Sidebar({ isOpen, onToggle }: SidebarProps) {
                 onClick={() => window.innerWidth < 1024 && onToggle()}
                 className={`flex items-center gap-3 px-3 py-2.5 rounded-lg text-sm font-medium transition-colors ${
                   isActive(item.path)
-                    ? 'bg-blue-50 text-blue-700'
-                    : 'text-gray-600 hover:bg-gray-50 hover:text-gray-900'
+                    ? 'bg-cognition-accent01/10 text-cognition-accent01'
+                    : 'text-cognition-grey02 hover:bg-cognition-dark03/50 hover:text-cognition-light01'
                 }`}
               >
                 {item.icon}
@@ -119,7 +119,7 @@ export function Sidebar({ isOpen, onToggle }: SidebarProps) {
 
           {/* Track Navigation */}
           <div className="mt-6">
-            <p className="px-3 text-xs font-semibold text-gray-400 uppercase tracking-wider mb-2">
+            <p className="px-3 text-xs font-semibold text-cognition-grey02 uppercase tracking-wider mb-2 font-heading">
               Learning Tracks
             </p>
             <div className="space-y-1">
@@ -129,7 +129,7 @@ export function Sidebar({ isOpen, onToggle }: SidebarProps) {
                   <div key={track.id}>
                     <button
                       onClick={() => toggleTrack(track.id)}
-                      className={`w-full flex items-center gap-2.5 px-3 py-2.5 rounded-lg text-sm font-medium transition-colors hover:bg-gray-50 ${
+                      className={`w-full flex items-center gap-2.5 px-3 py-2.5 rounded-lg text-sm font-medium transition-colors hover:bg-cognition-dark03/30 ${
                         trackColors[track.level]
                       }`}
                     >
@@ -160,8 +160,8 @@ export function Sidebar({ isOpen, onToggle }: SidebarProps) {
                                 onClick={() => window.innerWidth < 1024 && onToggle()}
                                 className={`flex items-center gap-2 px-3 py-2 rounded-md text-xs transition-colors ${
                                   isActive(`/lesson/${lesson.id}`)
-                                    ? 'bg-blue-50 text-blue-700 font-medium'
-                                    : 'text-gray-500 hover:bg-gray-50 hover:text-gray-700'
+                                    ? 'bg-cognition-accent01/10 text-cognition-accent01 font-medium'
+                                    : 'text-cognition-grey02 hover:bg-cognition-dark03/30 hover:text-cognition-grey01'
                                 }`}
                               >
                                 <span className="truncate">{lesson.title}</span>

@@ -19,15 +19,15 @@ const trackIcons: Record<string, React.ReactNode> = {
 };
 
 const trackGradients: Record<string, string> = {
-  beginner: 'from-emerald-500 to-teal-600',
-  intermediate: 'from-blue-500 to-indigo-600',
-  advanced: 'from-purple-500 to-pink-600',
+  beginner: 'from-cognition-accent02/80 to-cognition-accent02',
+  intermediate: 'from-cognition-accent01/80 to-cognition-accent01',
+  advanced: 'from-purple-400/80 to-purple-500',
 };
 
 const trackProgressColors: Record<string, string> = {
-  beginner: 'bg-emerald-500',
-  intermediate: 'bg-blue-500',
-  advanced: 'bg-purple-500',
+  beginner: 'bg-cognition-accent02',
+  intermediate: 'bg-cognition-accent01',
+  advanced: 'bg-purple-400',
 };
 
 export function TrackPage() {
@@ -39,8 +39,8 @@ export function TrackPage() {
   if (!track) {
     return (
       <div className="text-center py-16">
-        <p className="text-gray-500">Track not found.</p>
-        <Link to="/" className="text-blue-600 hover:underline mt-2 inline-block">
+        <p className="text-cognition-grey02">Track not found.</p>
+        <Link to="/" className="text-cognition-accent01 hover:underline mt-2 inline-block">
           Back to Dashboard
         </Link>
       </div>
@@ -54,31 +54,31 @@ export function TrackPage() {
       {/* Back Button */}
       <Link
         to="/"
-        className="inline-flex items-center gap-2 text-sm text-gray-500 hover:text-gray-700 transition-colors"
+        className="inline-flex items-center gap-2 text-sm text-cognition-grey02 hover:text-cognition-light01 transition-colors"
       >
         <ArrowLeft className="w-4 h-4" />
         Back to Dashboard
       </Link>
 
       {/* Track Header */}
-      <div className={`bg-gradient-to-br ${trackGradients[track.level]} rounded-2xl p-8 text-white`}>
+      <div className="bg-cognition-dark02 rounded-2xl p-8 text-cognition-light01 border border-cognition-dark03">
         <div className="flex items-center gap-3 mb-3">
-          <div className="w-10 h-10 bg-white/20 rounded-xl flex items-center justify-center">
+          <div className={`w-10 h-10 rounded-xl bg-gradient-to-br ${trackGradients[track.level]} flex items-center justify-center`}>
             {trackIcons[track.level]}
           </div>
-          <h1 className="text-2xl font-bold">{track.title}</h1>
+          <h1 className="text-2xl font-heading font-light tracking-wide">{track.title}</h1>
         </div>
-        <p className="text-white/80 max-w-xl">{track.description}</p>
+        <p className="text-cognition-grey01 max-w-xl">{track.description}</p>
         <div className="mt-6">
           <div className="flex items-center justify-between text-sm mb-2">
-            <span className="text-white/70">
+            <span className="text-cognition-grey02">
               {trackProgress.completed} of {trackProgress.total} lessons complete
             </span>
-            <span className="font-semibold">{trackProgress.percentage}%</span>
+            <span className="font-semibold text-cognition-light01">{trackProgress.percentage}%</span>
           </div>
-          <div className="w-full bg-white/20 rounded-full h-2.5">
+          <div className="w-full bg-cognition-dark03 rounded-full h-2.5">
             <div
-              className="bg-white rounded-full h-2.5 transition-all duration-500"
+              className="bg-gradient-to-r from-cognition-accent01 to-cognition-accent02 rounded-full h-2.5 transition-all duration-500"
               style={{ width: `${trackProgress.percentage}%` }}
             />
           </div>
@@ -90,17 +90,17 @@ export function TrackPage() {
         {track.modules.map((mod, modIdx) => {
           const modProgress = getModuleProgress(mod.id);
           return (
-            <div key={mod.id} className="bg-white rounded-xl border border-gray-200 overflow-hidden">
+            <div key={mod.id} className="bg-cognition-dark02 rounded-xl border border-cognition-dark03 overflow-hidden">
               {/* Module Header */}
-              <div className="p-5 border-b border-gray-100">
+              <div className="p-5 border-b border-cognition-dark03">
                 <div className="flex items-center justify-between">
                   <div className="flex items-center gap-3">
-                    <span className="w-8 h-8 bg-gray-100 rounded-lg flex items-center justify-center text-sm font-bold text-gray-500">
+                    <span className="w-8 h-8 bg-cognition-dark03 rounded-lg flex items-center justify-center text-sm font-bold text-cognition-grey02">
                       {modIdx + 1}
                     </span>
                     <div>
-                      <h3 className="font-semibold text-gray-900">{mod.title}</h3>
-                      <p className="text-sm text-gray-500">{mod.description}</p>
+                      <h3 className="font-medium text-cognition-light01">{mod.title}</h3>
+                      <p className="text-sm text-cognition-grey02">{mod.description}</p>
                     </div>
                   </div>
                 </div>
@@ -114,42 +114,42 @@ export function TrackPage() {
               </div>
 
               {/* Lessons */}
-              <div className="divide-y divide-gray-50">
+              <div className="divide-y divide-cognition-dark03/50">
                 {mod.lessons.map(lesson => {
                   const completed = isLessonComplete(lesson.id);
                   return (
                     <Link
                       key={lesson.id}
                       to={`/lesson/${lesson.id}`}
-                      className="flex items-center gap-4 p-4 hover:bg-gray-50 transition-colors group"
+                      className="flex items-center gap-4 p-4 hover:bg-cognition-dark03/30 transition-colors group"
                     >
                       <div className={`w-8 h-8 rounded-full flex items-center justify-center flex-shrink-0 ${
                         completed
-                          ? 'bg-emerald-100'
-                          : 'bg-gray-100'
+                          ? 'bg-cognition-accent02/20'
+                          : 'bg-cognition-dark03'
                       }`}>
                         {completed ? (
-                          <CheckCircle2 className="w-5 h-5 text-emerald-600" />
+                          <CheckCircle2 className="w-5 h-5 text-cognition-accent02" />
                         ) : (
-                          <div className="w-3 h-3 rounded-full bg-gray-300" />
+                          <div className="w-3 h-3 rounded-full bg-cognition-grey02" />
                         )}
                       </div>
                       <div className="flex-1 min-w-0">
-                        <h4 className={`text-sm font-medium group-hover:text-blue-600 transition-colors ${
-                          completed ? 'text-gray-600' : 'text-gray-900'
+                        <h4 className={`text-sm font-medium group-hover:text-cognition-accent01 transition-colors ${
+                          completed ? 'text-cognition-grey02' : 'text-cognition-light01'
                         }`}>
                           {lesson.title}
                         </h4>
-                        <p className="text-xs text-gray-400 mt-0.5 truncate">
+                        <p className="text-xs text-cognition-grey02 mt-0.5 truncate">
                           {lesson.description}
                         </p>
                       </div>
                       <div className="flex items-center gap-3 flex-shrink-0">
-                        <span className="flex items-center gap-1 text-xs text-gray-400">
+                        <span className="flex items-center gap-1 text-xs text-cognition-grey02">
                           <Clock className="w-3.5 h-3.5" />
                           {lesson.duration}
                         </span>
-                        <ArrowRight className="w-4 h-4 text-gray-300 group-hover:text-blue-500 transition-colors" />
+                        <ArrowRight className="w-4 h-4 text-cognition-grey02 group-hover:text-cognition-accent01 transition-colors" />
                       </div>
                     </Link>
                   );
