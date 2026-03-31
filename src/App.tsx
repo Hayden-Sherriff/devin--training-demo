@@ -5,6 +5,7 @@ import { TrackPage } from './pages/TrackPage';
 import { LessonPage } from './pages/LessonPage';
 import { Playground } from './pages/Playground';
 import { ProgressPage } from './pages/ProgressPage';
+import { CertificatesPage } from './pages/CertificatesPage';
 
 function App() {
   return (
@@ -16,6 +17,7 @@ function App() {
           <Route path="/lesson/:lessonId" element={<LessonPage />} />
           <Route path="/playground" element={<Playground />} />
           <Route path="/progress" element={<ProgressPage />} />
+          <Route path="/certificates" element={<CertificatesPage />} />
         </Route>
       </Routes>
     </BrowserRouter>

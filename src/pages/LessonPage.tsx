@@ -8,11 +8,12 @@ import {
   ChevronDown,
   ChevronUp,
 } from 'lucide-react';
-import { useState } from 'react';
+import { useState, useEffect, useRef } from 'react';
 import { getLessonById, getNextLesson, getPrevLesson } from '../data/curriculum';
 import { useProgress } from '../hooks/useProgress';
 import { LessonContentRenderer } from '../components/LessonContent';
 import { ExerciseCard } from '../components/ExerciseCard';
+import { CompletionModal } from '../components/CompletionModal';
 
 export function LessonPage() {
   const { lessonId } = useParams<{ lessonId: string }>();
@@ -23,12 +24,25 @@ export function LessonPage() {
     markLessonIncomplete,
     saveExerciseResult,
     isLessonComplete,
+    getTrackProgress,
   } = useProgress();
   const [showTips, setShowTips] = useState(false);
+  const [showCompletionModal, setShowCompletionModal] = useState(false);
+  const prevTrackPercentage = useRef<number | null>(null);
 
   const data = lessonId ? getLessonById(lessonId) : null;
+  const track = data?.track;
+  const trackProgress = track ? getTrackProgress(track.id) : { completed: 0, total: 0, percentage: 0 };
 
-  if (!data) {
+  // Auto-trigger completion modal when track reaches 100%
+  useEffect(() => {
+    if (prevTrackPercentage.current !== null && prevTrackPercentage.current < 100 && trackProgress.percentage === 100) {
+      setShowCompletionModal(true);
+    }
+    prevTrackPercentage.current = trackProgress.percentage;
+  }, [trackProgress.percentage]);
+
+  if (!data || !track) {
     return (
       <div className="text-center py-16">
         <p className="text-cognition-grey02">Lesson not found.</p>
@@ -39,11 +53,17 @@ export function LessonPage() {
     );
   }
 
-  const { track, module: mod, lesson } = data;
+  const { module: mod, lesson } = data;
   const nextLesson = getNextLesson(lesson.id);
   const prevLesson = getPrevLesson(lesson.id);
   const completed = isLessonComplete(lesson.id);
   const lessonProgress = progress.lessons[lesson.id];
+
+  // Count total exercises in this track
+  const totalExercises = track.modules.reduce(
+    (sum, m) => sum + m.lessons.reduce((s, l) => s + l.exercises.length, 0),
+    0
+  );
 
   const handleExerciseComplete = (exerciseId: string, userAnswer: string, isCorrect: boolean) => {
     saveExerciseResult(lesson.id, {
@@ -216,6 +236,16 @@ export function LessonPage() {
           </Link>
         )}
       </div>
+      {/* Completion Modal */}
+      <CompletionModal
+        isOpen={showCompletionModal}
+        onClose={() => setShowCompletionModal(false)}
+        trackId={track.id}
+        trackTitle={track.title}
+        trackLevel={track.level}
+        lessonCount={trackProgress.total}
+        exerciseCount={totalExercises}
+      />
     </div>
   );
 }

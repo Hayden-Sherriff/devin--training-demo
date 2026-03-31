@@ -7,10 +7,14 @@ import {
   GraduationCap,
   BookOpen,
   Rocket,
+  Award,
 } from 'lucide-react';
+import { useState } from 'react';
 import { getTrackById } from '../data/curriculum';
 import { useProgress } from '../hooks/useProgress';
 import { ProgressBar } from '../components/ProgressBar';
+import { CompletionModal } from '../components/CompletionModal';
+import { useCertificates } from '../hooks/useCertificates';
 
 const trackIcons: Record<string, React.ReactNode> = {
   beginner: <GraduationCap className="w-6 h-6" />,
@@ -33,6 +37,8 @@ const trackProgressColors: Record<string, string> = {
 export function TrackPage() {
   const { trackId } = useParams<{ trackId: string }>();
   const { isLessonComplete, getTrackProgress, getModuleProgress } = useProgress();
+  const { hasCertificate } = useCertificates();
+  const [showCompletionModal, setShowCompletionModal] = useState(false);
 
   const track = trackId ? getTrackById(trackId) : undefined;
 
@@ -48,6 +54,14 @@ export function TrackPage() {
   }
 
   const trackProgress = getTrackProgress(track.id);
+  const isTrackComplete = trackProgress.percentage === 100;
+  const hasExistingCert = hasCertificate(track.id);
+
+  // Count total exercises in this track
+  const totalExercises = track.modules.reduce(
+    (sum, mod) => sum + mod.lessons.reduce((s, l) => s + l.exercises.length, 0),
+    0
+  );
 
   return (
     <div className="space-y-6 animate-fade-in">
@@ -83,6 +97,28 @@ export function TrackPage() {
             />
           </div>
         </div>
+
+        {/* Certificate / Completion Button */}
+        {isTrackComplete && (
+          <div className="mt-6 flex items-center gap-3">
+            <button
+              onClick={() => setShowCompletionModal(true)}
+              className="flex items-center gap-2 px-5 py-2.5 rounded-lg text-cognition-dark01 font-medium text-sm transition-all hover:opacity-90"
+              style={{ background: 'linear-gradient(to right, #7485CA 0%, #81B7D4 46%, #85C4C0 100%)' }}
+            >
+              <Award className="w-4 h-4" />
+              {hasExistingCert ? 'View Certificate' : 'Claim Your Certificate'}
+            </button>
+            {hasExistingCert && (
+              <Link
+                to="/certificates"
+                className="text-sm text-cognition-grey02 hover:text-cognition-light01 transition-colors"
+              >
+                View all certificates
+              </Link>
+            )}
+          </div>
+        )}
       </div>
 
       {/* Modules */}
@@ -159,6 +195,16 @@ export function TrackPage() {
           );
         })}
       </div>
+      {/* Completion Modal */}
+      <CompletionModal
+        isOpen={showCompletionModal}
+        onClose={() => setShowCompletionModal(false)}
+        trackId={track.id}
+        trackTitle={track.title}
+        trackLevel={track.level}
+        lessonCount={trackProgress.total}
+        exerciseCount={totalExercises}
+      />
     </div>
   );
 }

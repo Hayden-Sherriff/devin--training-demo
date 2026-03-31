@@ -11,6 +11,7 @@ import {
   Menu,
   X,
   Sparkles,
+  Award,
 } from 'lucide-react';
 import { useState } from 'react';
 import { tracks } from '../data/curriculum';
@@ -58,6 +59,7 @@ export function Sidebar({ isOpen, onToggle }: SidebarProps) {
     { path: '/', icon: <Home className="w-4 h-4" />, label: 'Dashboard' },
     { path: '/playground', icon: <Gamepad2 className="w-4 h-4" />, label: 'Playground' },
     { path: '/progress', icon: <BarChart3 className="w-4 h-4" />, label: 'Progress' },
+    { path: '/certificates', icon: <Award className="w-4 h-4" />, label: 'Certificates' },
   ];
 
   return (
