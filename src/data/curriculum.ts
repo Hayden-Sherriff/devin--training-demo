@@ -81,6 +81,15 @@ export const tracks: Track[] = [
                 'Learns from your codebase context and conventions',
                 'Can run multiple sessions in parallel'
               ]},
+              { type: 'heading', value: 'Devin\'s Strengths' },
+              { type: 'text', value: 'According to the official docs, here are the types of tasks where Devin excels:' },
+              { type: 'list', value: 'Best use cases:', items: [
+                'Tackling many tasks in parallel \u2014 Linear/Jira tickets, features, bug reports',
+                'Code migrations and refactors \u2014 JS to TS, framework upgrades, removing feature flags',
+                'Common engineering tasks \u2014 PR review, codebase Q&A, writing unit tests, docs',
+                'Customer engineering \u2014 new integrations, API work, prototyping, internal tools'
+              ]},
+              { type: 'callout', value: 'Rule of thumb: if a task would take you three hours or less, Devin can most likely do it. For larger projects, break them into focused sessions.', variant: 'tip' },
               { type: 'heading', value: 'When to Use Devin' },
               { type: 'text', value: 'Devin excels at well-defined tasks that you can describe clearly. Think of it as delegating work to a capable junior developer \u2014 the clearer your instructions, the better the results.' },
               { type: 'comparison', value: 'Task Description', good: 'Add a password reset feature to the auth module. Use the existing email service in src/services/email.ts. The reset token should expire after 1 hour. Add tests.', bad: 'Add password reset', goodExplanation: 'Specific, references existing code, defines requirements', badExplanation: 'Too vague \u2014 Devin has to guess at implementation details' },
@@ -205,14 +214,46 @@ export const tracks: Track[] = [
               { type: 'list', value: 'Key Interface Elements:', items: [
                 'Session Chat \u2014 where you communicate with Devin and assign tasks',
                 'Desktop View \u2014 watch Devin\'s screen in real-time as it works',
+                'Devin IDE \u2014 browse and edit code directly in the browser',
                 'Timeline \u2014 see a structured log of Devin\'s actions and decisions',
                 'Shell/Editor/Browser tabs \u2014 inspect Devin\'s development environment',
                 'Session List \u2014 manage multiple concurrent sessions',
                 'Settings \u2014 configure repos, secrets, environment, and integrations'
               ]},
-              { type: 'heading', value: 'Starting a New Session' },
-              { type: 'text', value: 'To start working with Devin, create a new session from the dashboard. You can select which repository to work in and provide your initial task description.' },
-              { type: 'callout', value: 'Pro tip: You can also start Devin sessions from Slack, Linear, or other integrated tools.', variant: 'tip' },
+              { type: 'heading', value: 'Ask Mode vs Agent Mode' },
+              { type: 'text', value: 'When you start a new session, you\'ll see two primary modes: Ask and Agent. Unless you already have a fully scoped plan, start with Ask to explore and plan, then move to Agent to execute.' },
+              { type: 'list', value: 'Ask Mode:', items: [
+                'Lightweight mode for exploring your codebase and planning tasks',
+                'Uses advanced code search to produce detailed, well-cited answers',
+                'Can scope and plan work before implementation',
+                'Generates context-rich prompts you can send to Agent mode',
+                'Can be triggered from the main page or from a DeepWiki page'
+              ]},
+              { type: 'list', value: 'Agent Mode:', items: [
+                'Full autonomous mode \u2014 Devin writes code, runs commands, browses the web',
+                'Use when you\'re ready to implement features, fix bugs, create PRs',
+                'Select a repository and an agent (Default Devin, Fast Mode, or Dana for data)',
+                'Can be started from Ask mode after planning, or directly from the main page'
+              ]},
+              { type: 'callout', value: 'Recommended workflow: Start with Ask to scope the problem \u2192 Build a Devin Prompt from your Ask session \u2192 Click "Send to Devin" to execute in Agent mode.', variant: 'tip' },
+              { type: 'heading', value: 'Using @ Mentions' },
+              { type: 'text', value: 'Use @ mentions to give Devin specific context. Type @ in the chat input to see available options:' },
+              { type: 'list', value: '@ Mention Types:', items: [
+                '@Repos \u2014 Reference a specific repository',
+                '@Files \u2014 Reference a specific file in your codebase',
+                '@Macros \u2014 Reference a Knowledge entry by its macro',
+                '@Playbooks \u2014 Reference a reusable playbook template',
+                '@Skills \u2014 Reference a SKILL.md file in your repo',
+                '@Secrets \u2014 Reference a stored secret (API keys, credentials)',
+                '@Sessions \u2014 Reference a previous Devin session for context'
+              ]},
+              { type: 'heading', value: 'Selecting a Repository & Agent' },
+              { type: 'text', value: 'When starting an Agent session, select the repository you want Devin to work with. This ensures Devin has access to your code, uses the correct branch, and creates PRs to the right repo.' },
+              { type: 'list', value: 'Available Agents:', items: [
+                'Devin (default) \u2014 General-purpose AI software engineer for most tasks',
+                'Fast Mode \u2014 Optimized for quick, well-scoped tasks',
+                'Dana \u2014 Data analyst agent for querying databases and creating visualizations'
+              ]},
               { type: 'heading', value: 'Monitoring Progress' },
               { type: 'text', value: 'While Devin works, you can watch its progress in real-time. The timeline shows each step Devin takes, and you can switch to the Desktop tab to see its screen directly.' },
             ],
@@ -229,6 +270,27 @@ export const tracks: Track[] = [
                 ],
                 correctOption: 1,
                 explanation: 'The Desktop tab lets you watch Devin\'s screen live, so you can see exactly what it\'s doing \u2014 browsing, coding, running commands, etc.'
+              },
+              {
+                id: 'ex-interface-ask-agent',
+                type: 'multiple-choice',
+                question: 'You want to understand how the authentication system works before making changes. Which mode should you use?',
+                options: [
+                  'Agent Mode \u2014 have Devin start implementing immediately',
+                  'Ask Mode \u2014 explore the codebase and understand the auth flow first',
+                  'Start a child session',
+                  'Read the code yourself without Devin'
+                ],
+                correctOption: 1,
+                explanation: 'Ask Mode is designed for exploring and understanding your codebase. Use it to scope the problem, then send a well-informed prompt to Agent Mode for implementation.'
+              },
+              {
+                id: 'ex-interface-mentions',
+                type: 'scenario',
+                question: 'Write the prompt you would give to Devin for this scenario.',
+                scenario: 'You want Devin to fix a bug in your authentication module. You have a playbook called "bug-fix-flow" and the relevant file is src/auth/middleware.ts. You also want to reference a previous session where a similar bug was fixed. Write the prompt using @ mentions.',
+                hint: 'Use @Playbooks, @Files, and @Sessions to give Devin rich context.',
+                idealAnswer: 'Fix the session expiry bug in @Files src/auth/middleware.ts. Follow the @Playbooks bug-fix-flow playbook for our standard bug fix process. For reference, a similar session timeout bug was fixed in @Sessions [previous-session-id]. The issue is that expired tokens are not being rejected \u2014 the middleware should return 401 for tokens older than 24 hours. Add tests to cover: valid token, expired token, and malformed token.'
               },
               {
                 id: 'ex-interface-2',
@@ -278,13 +340,20 @@ export const tracks: Track[] = [
               ]},
               { type: 'comparison', value: 'Bug Fix Request', good: 'Fix the login timeout issue. Users report being logged out after 5 minutes of inactivity. The session management is in src/auth/session.ts. The timeout should be 30 minutes. Make sure to update the related tests in __tests__/session.test.ts.', bad: 'Fix the login bug', goodExplanation: 'Describes the symptom, points to relevant files, specifies the expected behavior, and mentions tests', badExplanation: 'No detail about what the bug is, where to look, or what "fixed" means' },
               { type: 'comparison', value: 'Feature Request', good: 'Add a dark mode toggle to the settings page (src/pages/Settings.tsx). Use the existing ThemeContext in src/context/theme.ts. Store the preference in localStorage. The toggle should be a switch component matching our design system in src/components/ui/.', bad: 'Add dark mode to the app', goodExplanation: 'Points to exact files, references existing systems, specifies storage mechanism and UI component style', badExplanation: 'Too broad \u2014 Devin would have to make many assumptions about where and how to implement this' },
+              { type: 'heading', value: 'Good vs Bad Instructions (from Official Docs)' },
+              { type: 'text', value: 'The official Devin documentation provides clear examples of effective vs ineffective instructions:' },
+              { type: 'comparison', value: 'API Endpoint', good: 'Create a new REST API endpoint POST /api/v1/reports that generates a PDF report. Use the existing ReportService in src/services/reports.ts. Accept { startDate, endDate, format } in the request body. Validate with Zod. Return the PDF as a binary stream with Content-Type: application/pdf. Reference the existing GET /api/v1/invoices endpoint for the response pattern.', bad: 'Add a reports endpoint', goodExplanation: 'Specifies HTTP method, path, service to use, request/response format, validation, and reference pattern', badExplanation: 'Devin has no idea what kind of reports, what format, or what the endpoint should accept/return' },
+              { type: 'comparison', value: 'Unit Tests', good: 'Write unit tests for the calculateShipping() function in src/utils/shipping.ts. Cover these cases: domestic standard (should be $5.99), domestic express ($12.99), international ($24.99), free shipping for orders over $100, and invalid country code (should throw). Use the existing test patterns in src/utils/__tests__/pricing.test.ts.', bad: 'Add tests for shipping', goodExplanation: 'Specifies the exact function, test cases with expected values, and points to an existing test file as a pattern', badExplanation: 'Which shipping code? What should be tested? What are the expected results?' },
+              { type: 'comparison', value: 'Migration Task', good: 'Migrate the UserProfile component from class-based to functional React using hooks. File: src/components/UserProfile.tsx. Convert lifecycle methods: componentDidMount \u2192 useEffect, this.state \u2192 useState. Keep the same prop interface. The component should render identically \u2014 run the existing snapshot tests to verify.', bad: 'Convert the user profile to hooks', goodExplanation: 'Specifies the file, exact conversions needed, what to preserve, and how to verify', badExplanation: 'Which component? What specific conversions? How to verify it still works?' },
               { type: 'heading', value: 'Common Prompting Mistakes' },
               { type: 'list', value: 'Avoid these:', items: [
                 'Being too vague ("make it better")',
                 'Assuming Devin knows your preferences without stating them',
                 'Giving multiple unrelated tasks in one prompt',
                 'Not specifying which files or modules to work with',
-                'Forgetting to mention testing requirements'
+                'Forgetting to mention testing requirements',
+                'Not referencing existing code patterns for Devin to follow',
+                'Skipping success criteria \u2014 what does "done" look like?'
               ]},
               { type: 'template', templateTitle: 'Bug Fix Template', value: 'Fix [describe the bug]. The issue occurs when [describe trigger]. The relevant code is in [file path]. Expected behavior: [describe]. Current behavior: [describe]. Please also update the tests in [test file path].' },
               { type: 'template', templateTitle: 'Feature Request Template', value: 'Add [feature name] to [component/page]. It should [describe functionality]. Use the existing [services/utilities/patterns] in [file paths]. Follow the same conventions as [similar existing feature]. Include tests.' },
@@ -340,26 +409,47 @@ export const tracks: Track[] = [
               { type: 'heading', value: 'Task Assignment Workflow' },
               { type: 'text', value: 'Here\'s the recommended workflow for getting great results from Devin:' },
               { type: 'list', value: 'Step-by-step:', items: [
-                '1. Start a new session and select your repository',
-                '2. Write a clear task description using the SCOPE framework',
-                '3. Provide any necessary context (links to issues, design specs, etc.)',
-                '4. Let Devin plan and begin working',
-                '5. Monitor progress and provide feedback early',
-                '6. Review the PR when Devin creates it',
-                '7. Leave comments on the PR for any changes needed'
+                '1. Scope with Ask Mode \u2014 explore the codebase and plan the approach',
+                '2. Build a Devin Prompt from your Ask session with rich context',
+                '3. Send to Agent Mode to execute the plan',
+                '4. Monitor progress and provide feedback early',
+                '5. Review the PR when Devin creates it',
+                '6. Leave comments on the PR for any changes needed',
+                '7. Let Devin Review + Auto-Fix iterate on feedback automatically'
+              ]},
+              { type: 'heading', value: 'First-Time Prompt Ideas' },
+              { type: 'text', value: 'Not sure where to start? The official Devin docs recommend these first tasks:' },
+              { type: 'list', value: 'Great starter tasks:', items: [
+                'Add a new API endpoint \u2014 reference an existing endpoint as a pattern',
+                'Small frontend features \u2014 add a dropdown, form field, or UI component',
+                'Write unit tests \u2014 target a specific file and set a coverage goal',
+                'Migrate/refactor code \u2014 e.g., convert a JS file to TypeScript',
+                'Create a quick PR \u2014 small, focused code changes'
+              ]},
+              { type: 'heading', value: 'Pre-Task Checklist (from Official Docs)' },
+              { type: 'text', value: 'Before assigning a task, ask yourself:' },
+              { type: 'list', value: 'Evaluate your task:', items: [
+                'Can I describe clear success criteria? (tests passing, CI green, matching a pattern)',
+                'Is there enough context? (relevant files, patterns, docs, examples)',
+                'Would breaking this down help? (split large projects into focused sessions)',
+                'Can Devin validate its own work? (test suites, lint checks, browser testing)'
               ]},
               { type: 'heading', value: 'Providing Feedback' },
               { type: 'text', value: 'You can guide Devin during a session by sending messages in the chat. You can also leave comments directly on the pull request \u2014 Devin will read and act on them.' },
               { type: 'callout', value: 'Devin works best with specific, actionable feedback. Instead of "this doesn\'t look right," try "the button color should be blue-500 instead of blue-700, and add 8px of padding."', variant: 'tip' },
               { type: 'heading', value: 'Setting Up Your Repo' },
-              { type: 'text', value: 'For the best experience, make sure your repository has:' },
-              { type: 'list', value: 'Repo setup checklist:', items: [
-                'A clear README with setup instructions',
-                'Environment configuration in Devin settings',
-                'Necessary secrets configured (API keys, tokens)',
-                'Lint and test commands documented',
-                'AGENTS.md or SKILL.md files for project-specific guidance'
+              { type: 'text', value: 'Setting up Devin\'s environment correctly will significantly improve performance. Think of it as setting up Devin\'s laptop on its first day of work.' },
+              { type: 'list', value: 'Repo Setup Steps (from Devin\'s Machine settings):', items: [
+                'Git Pull \u2014 command to pull latest changes at session start',
+                'Configure Secrets \u2014 API keys, tokens, environment variables',
+                'Install Dependencies \u2014 one-time setup commands',
+                'Maintain Dependencies \u2014 commands that run each session (npm install, etc.)',
+                'Set up Lint \u2014 lint/syntax check commands Devin runs before committing',
+                'Set up Tests \u2014 test commands Devin runs before committing',
+                'Run Local App \u2014 how to start the app locally for testing',
+                'Additional Notes \u2014 any extra instructions for Devin'
               ]},
+              { type: 'callout', value: 'Imagine if every time you started a task, your laptop and part of your memory were wiped \u2014 that\'s what happens to Devin with an incorrect or incomplete setup!', variant: 'warning' },
             ],
             exercises: [
               {
@@ -374,6 +464,14 @@ export const tracks: Track[] = [
                 ],
                 correctOption: 1,
                 explanation: 'Providing specific feedback early helps Devin course-correct quickly. PR comments are especially effective because Devin can see exactly which code you\'re referring to.'
+              },
+              {
+                id: 'ex-assigning-scope',
+                type: 'scenario',
+                question: 'Write the prompt you would give to Devin for this scenario.',
+                scenario: 'You want to add a new API endpoint to your project. Before starting, you want to use Ask mode to scope the work, then send it to Agent mode. Write what you would type in Ask mode first.',
+                hint: 'In Ask mode, ask exploratory questions about existing patterns. Then describe how you would transition to Agent mode.',
+                idealAnswer: 'Ask Mode: "How are API endpoints structured in this project? Show me an example of an existing endpoint with its route, controller, validation, and tests. Also, what authentication middleware is used and how is it applied?"\n\nAfter reviewing the answer, I would click "Build a Devin Prompt" and add: "Create a new GET /api/reports endpoint following the same pattern as the /api/users endpoint you showed me. Include request validation with Zod, auth middleware, and tests. Return paginated results with cursor-based pagination."'
               },
               {
                 id: 'ex-assigning-2',
@@ -429,6 +527,15 @@ export const tracks: Track[] = [
             content: [
               { type: 'heading', value: 'Why Break Down Tasks?' },
               { type: 'text', value: 'Large, complex tasks are harder for any developer \u2014 including Devin \u2014 to get right in one shot. Breaking tasks into smaller, well-defined pieces leads to better results and easier review.' },
+              { type: 'heading', value: 'Interactive Planning (from Official Docs)' },
+              { type: 'text', value: 'For complex tasks, use Devin\'s Interactive Planning feature. This creates a structured workflow where Devin proposes a plan and waits for your approval before executing.' },
+              { type: 'list', value: 'Planning phases:', items: [
+                'Initial Assessment \u2014 Devin analyzes the task, identifies affected files, and suggests an approach',
+                'Detailed Plan \u2014 Devin creates a step-by-step implementation plan with specific files and changes',
+                'Approval Gate \u2014 You review the plan, suggest modifications, or approve it',
+                'Execution \u2014 Devin follows the approved plan, checking off each step'
+              ]},
+              { type: 'callout', value: 'To use Interactive Planning, add "Please create a plan and wait for my approval before implementing" to your prompt. This is especially valuable for complex tasks where the approach matters.', variant: 'tip' },
               { type: 'heading', value: 'Task Decomposition Strategies' },
               { type: 'list', value: 'Approaches:', items: [
                 'By layer: Frontend \u2192 API \u2192 Database',
@@ -494,6 +601,9 @@ export const tracks: Track[] = [
                 'Partial implementation \u2192 List all requirements explicitly',
                 'Style mismatches \u2192 Reference existing components as examples'
               ]},
+              { type: 'heading', value: 'Using Devin Search for Investigation' },
+              { type: 'text', value: 'Before debugging, use Devin Search (Ask mode) to understand the codebase context. Devin Search provides rapid, well-cited answers about how things work, making it easier to identify root causes.' },
+              { type: 'callout', value: 'Try asking in Ask mode: "How does the authentication middleware work?" or "What files are involved in the payment flow?" Devin Search will give you a detailed, cited answer you can use to write better debugging prompts.', variant: 'tip' },
               { type: 'heading', value: 'Using CI Feedback' },
               { type: 'text', value: 'Devin monitors CI (continuous integration) checks after creating a PR. If tests fail or lint errors occur, Devin will attempt to fix them automatically. You can also point Devin to specific CI failures.' },
               { type: 'comparison', value: 'Debug Feedback', good: 'The CI is failing with "TypeError: Cannot read property \'id\' of undefined" in src/utils/formatUser.ts:42. It looks like the user object can be null when the session expires. Please add a null check before accessing user.id.', bad: 'CI is failing, please fix it.', goodExplanation: 'Identifies the exact error, file, line, and likely cause', badExplanation: 'Devin already knows CI failed \u2014 this doesn\'t add useful information' },
@@ -506,7 +616,15 @@ export const tracks: Track[] = [
                 'Ensure tests cover the important scenarios',
                 'Check for security concerns (exposed secrets, SQL injection, etc.)'
               ]},
-              { type: 'callout', value: 'You can use Devin Review to automatically review PRs. This catches issues early and provides structured feedback.', variant: 'info' },
+              { type: 'heading', value: 'Devin Review & Auto-Fix' },
+              { type: 'text', value: 'Devin Review automatically reviews PRs created by both humans and Devin. It catches issues early and can even auto-fix problems:' },
+              { type: 'list', value: 'Devin Review features:', items: [
+                'Automated code review on every PR',
+                'Auto-Fix mode \u2014 Devin can automatically fix issues it finds in its own PRs',
+                'Structured feedback with specific file and line references',
+                'Configurable rules and review criteria'
+              ]},
+              { type: 'callout', value: 'Enable Devin Review on your repo to catch issues before human reviewers see the PR. With Auto-Fix enabled, Devin will automatically address its own review comments.', variant: 'info' },
             ],
             exercises: [
               {
@@ -567,6 +685,14 @@ export const tracks: Track[] = [
             content: [
               { type: 'heading', value: 'The Iteration Mindset' },
               { type: 'text', value: 'Getting the perfect result on the first try is rare. The key is to iterate quickly and efficiently. Each round of feedback should make the output significantly better.' },
+              { type: 'heading', value: 'Using Session Analysis for Learning' },
+              { type: 'text', value: 'After each session, Devin can analyze what went well and what could be improved. Use this to refine your prompting style over time.' },
+              { type: 'list', value: 'Post-session learning:', items: [
+                'Review the session timeline to understand Devin\'s thought process',
+                'Note where Devin needed extra guidance \u2014 next time, include that context upfront',
+                'Save effective prompts as Knowledge entries or playbooks for reuse',
+                'Use "Improve Playbook" to have Devin refine playbooks based on session results'
+              ]},
               { type: 'heading', value: 'Effective Iteration Patterns' },
               { type: 'list', value: 'Iteration strategies:', items: [
                 'Start broad, then narrow: Give a general task, then refine based on output',
@@ -639,12 +765,16 @@ export const tracks: Track[] = [
                 'Ensure CI/CD pipeline is configured',
                 'Document key architecture decisions in the README'
               ]},
-              { type: 'heading', value: 'Environment Configuration' },
-              { type: 'text', value: 'The environment config tells Devin how to set up the development environment. It has two sections:' },
-              { type: 'list', value: 'Config sections:', items: [
-                'initialize: One-time setup commands (install tools, global deps)',
-                'maintenance: Commands that run every session (npm install, pip install)',
-                'knowledge: Reference info like lint commands, test commands, startup steps'
+              { type: 'heading', value: 'Environment Configuration (Machine Settings)' },
+              { type: 'text', value: 'The environment config tells Devin how to set up the development environment. Think of it as Devin\'s laptop setup. The official docs break it into these sections:' },
+              { type: 'list', value: 'Machine Settings (from Settings > Machine):', items: [
+                'Git Pull \u2014 how to get latest code (runs at session start)',
+                'Install Dependencies \u2014 one-time setup commands (initialize)',
+                'Maintain Dependencies \u2014 recurring commands each session (maintenance)',
+                'Lint \u2014 commands to check code quality before committing',
+                'Tests \u2014 commands to run tests before creating PRs',
+                'Run Local App \u2014 how to start the dev server for testing',
+                'Additional Notes \u2014 any extra context or instructions'
               ]},
               { type: 'code', value: '# Example environment config\ninitialize: |\n  curl -LsSf https://astral.sh/uv/install.sh | sh\nmaintenance: |\n  npm install\n  npm run prepare\nknowledge:\n  - name: lint\n    contents: npm run lint\n  - name: test\n    contents: npm test\n  - name: startup\n    contents: npm run dev' },
               { type: 'heading', value: 'Knowledge and Skills' },
@@ -712,12 +842,25 @@ export const tracks: Track[] = [
                 'Split by concern: Implementation in one session, tests in another',
                 'Use child sessions: A parent session can spawn child sessions for sub-tasks'
               ]},
-              { type: 'heading', value: 'Child Sessions' },
-              { type: 'text', value: 'Devin can create child sessions to delegate sub-tasks. This is powerful for batch operations or parallelizable work.' },
+              { type: 'heading', value: 'Managed Devins (from Official Docs)' },
+              { type: 'text', value: 'Managed Devins allow a coordinator Devin to create and manage child sessions, monitor their progress, and aggregate results. This is the most powerful parallelization pattern.' },
+              { type: 'list', value: 'Managed Devin capabilities:', items: [
+                'Coordinator creates child sessions with specific tasks and playbooks',
+                'Monitor progress of all child sessions from the parent',
+                'Aggregate results and merge changes systematically',
+                'Use batch operations for repetitive tasks across many files/repos'
+              ]},
               { type: 'code', value: '// Example: Using child sessions for batch migrations\n// Parent session prompt:\n"Migrate these 5 API endpoints from Express to Fastify.\nCreate a child session for each endpoint:\n1. GET /api/users -> child session 1\n2. POST /api/users -> child session 2\n3. GET /api/posts -> child session 3\n4. POST /api/posts -> child session 4\n5. GET /api/comments -> child session 5\nEach session should follow the migration pattern in MIGRATION_GUIDE.md."' },
               { type: 'callout', value: 'When using parallel sessions, make sure the tasks are truly independent. If session B depends on the output of session A, run them sequentially.', variant: 'warning' },
               { type: 'heading', value: 'Scheduled Sessions' },
-              { type: 'text', value: 'You can schedule recurring Devin sessions for maintenance tasks like dependency updates, security scans, or regular code quality checks.' },
+              { type: 'text', value: 'You can schedule recurring Devin sessions for maintenance tasks. Set these up in the Devin webapp under Settings > Schedules:' },
+              { type: 'list', value: 'Scheduled session use cases:', items: [
+                'Weekly dependency updates and security patches',
+                'Daily or weekly code quality scans',
+                'Automated test coverage reports',
+                'Regular documentation updates from code changes',
+                'Stale branch cleanup and repository maintenance'
+              ]},
             ],
             exercises: [
               {
@@ -764,6 +907,25 @@ export const tracks: Track[] = [
                 'Level 3: High-level goals with well-configured environment (high autonomy)',
                 'Level 4: Automated triggers with playbooks and schedules (maximum autonomy)'
               ]},
+              { type: 'heading', value: 'Knowledge Management (from Official Docs)' },
+              { type: 'text', value: 'Devin\'s Knowledge system stores important context that persists across sessions. Effective knowledge management is key to autonomy.' },
+              { type: 'list', value: 'Knowledge features:', items: [
+                'Trigger Description \u2014 tells Devin when to use this knowledge (e.g., "when working on auth")',
+                'Macro \u2014 a short @-mentionable alias (e.g., @auth-guide) for quick reference',
+                'Content \u2014 the actual knowledge, instructions, or context',
+                'Pinned Knowledge \u2014 always loaded at session start, no trigger needed',
+                'Organization-wide \u2014 shared across all repos and team members'
+              ]},
+              { type: 'callout', value: 'Knowledge entries with good trigger descriptions fire automatically when relevant. Pinned knowledge is always active. Use macros (@my-macro) for on-demand access.', variant: 'tip' },
+              { type: 'heading', value: 'Playbooks for Repeatable Workflows' },
+              { type: 'text', value: 'Playbooks are reusable task templates that standardize how Devin handles common tasks. They\'re like runbooks for your AI engineer.' },
+              { type: 'list', value: 'Playbook best practices:', items: [
+                'Create playbooks for tasks you delegate frequently (new endpoints, bug fixes, migrations)',
+                'Use "Improve Playbook" after sessions to refine based on what worked',
+                'Reference playbooks with @Playbooks in your prompts',
+                'Share playbooks across your team for consistent results',
+                'Include acceptance criteria and quality checks in the playbook'
+              ]},
               { type: 'heading', value: 'Prerequisites for High Autonomy' },
               { type: 'text', value: 'To let Devin work with minimal supervision, you need:' },
               { type: 'list', value: 'Autonomy checklist:', items: [
@@ -772,16 +934,19 @@ export const tracks: Track[] = [
                 'SKILL.md files capturing project-specific knowledge',
                 'Environment config with all necessary setup steps',
                 'Secrets properly configured in Devin settings',
-                'Playbooks for common task patterns'
+                'Playbooks for common task patterns',
+                'Knowledge entries for project conventions and gotchas',
+                'Devin Review enabled for automated PR review'
               ]},
               { type: 'heading', value: 'Quality Guardrails' },
               { type: 'text', value: 'Autonomy doesn\'t mean no oversight. Set up automated guardrails:' },
               { type: 'list', value: 'Guardrails:', items: [
                 'CI checks that must pass before merging',
-                'Devin Review for automated PR review',
+                'Devin Review for automated PR review with Auto-Fix',
                 'Required reviewers on the repository',
                 'Branch protection rules',
-                'Test coverage thresholds'
+                'Test coverage thresholds',
+                'Knowledge entries that enforce project conventions'
               ]},
               { type: 'callout', value: 'The goal is to make Devin\'s happy path (everything works on the first try) as common as possible. Invest time in setup to save time on every future task.', variant: 'success' },
             ],
@@ -798,6 +963,26 @@ export const tracks: Track[] = [
                 ],
                 correctOption: 1,
                 explanation: 'A comprehensive CI pipeline acts as an automated quality gate. If Devin\'s code passes lint, tests, and type-checking, you can be much more confident in the output without manual review of every line.'
+              },
+              {
+                id: 'ex-autonomy-knowledge',
+                type: 'prompt-writing',
+                question: 'Write a Knowledge entry for Devin that covers your project\'s authentication conventions. Include a trigger description and macro name.',
+                hint: 'Think about: when should this knowledge fire automatically, what conventions should Devin follow, and what the macro should be called.',
+                idealAnswer: 'Trigger: When working on authentication, login, signup, session management, or JWT tokens\nMacro: @auth-conventions\n\nContent:\n- All auth logic lives in src/auth/ directory\n- Use jsonwebtoken library for JWT \u2014 never use other JWT libraries\n- Access tokens expire after 15 minutes, refresh tokens after 7 days\n- Store tokens in httpOnly cookies, never localStorage\n- Auth middleware is in src/auth/middleware.ts \u2014 apply to all protected routes\n- Password hashing uses bcrypt with 12 salt rounds\n- Rate limit login attempts to 5 per minute per IP\n- All auth endpoints need integration tests in src/auth/__tests__/'
+              },
+              {
+                id: 'ex-autonomy-integration',
+                type: 'multiple-choice',
+                question: 'Which integration allows you to start Devin sessions directly from your project management tool?',
+                options: [
+                  'GitHub Actions',
+                  'Slack, Linear, or Jira integrations',
+                  'Docker',
+                  'VS Code extension'
+                ],
+                correctOption: 1,
+                explanation: 'Devin integrates natively with Slack, Linear, and Jira. You can assign tickets to Devin, start sessions from Slack messages, or auto-trigger sessions when tickets are created.'
               },
               {
                 id: 'ex-autonomy-2',
@@ -904,12 +1089,23 @@ export const tracks: Track[] = [
                 '7. Devin addresses feedback and updates the PR',
                 '8. PR is merged after CI passes and reviews are approved'
               ]},
-              { type: 'heading', value: 'Workflow 2: Automated Maintenance' },
-              { type: 'text', value: 'Use scheduled sessions for ongoing maintenance:' },
-              { type: 'list', value: 'Example automations:', items: [
-                'Weekly dependency updates: "Check for outdated packages and update minor/patch versions. Run tests to verify compatibility."',
-                'Daily security scan: "Run npm audit and fix any vulnerabilities that have a patch available."',
-                'Monthly docs update: "Review all TODO comments in the codebase and create issues for any that are stale."'
+              { type: 'heading', value: 'Workflow 2: Integrations & Automation (from Official Docs)' },
+              { type: 'text', value: 'Devin integrates natively with your existing tools. Use these integrations to create automated workflows:' },
+              { type: 'list', value: 'Native integrations:', items: [
+                'GitHub/GitLab \u2014 PR creation, code review, issue tracking',
+                'Slack \u2014 Start sessions and get updates directly in Slack channels',
+                'Linear \u2014 Auto-assign tickets to Devin, track progress in Linear',
+                'Jira \u2014 Connect Jira tickets to Devin sessions',
+                'MCP Servers \u2014 Connect external tools via the Model Context Protocol'
+              ]},
+              { type: 'heading', value: 'MCP Marketplace' },
+              { type: 'text', value: 'The MCP (Model Context Protocol) Marketplace lets you extend Devin\'s capabilities with third-party tools and custom integrations:' },
+              { type: 'list', value: 'MCP examples:', items: [
+                'Database access \u2014 Query production data safely',
+                'Monitoring tools \u2014 Check error rates, logs, and metrics',
+                'Design tools \u2014 Reference Figma designs during implementation',
+                'Custom APIs \u2014 Connect your internal tools and services',
+                'Documentation \u2014 Access Confluence, Notion, or other knowledge bases'
               ]},
               { type: 'heading', value: 'Workflow 3: Codebase Migration' },
               { type: 'text', value: 'Large migrations are a perfect use case for Devin:' },
@@ -932,6 +1128,14 @@ export const tracks: Track[] = [
                 question: 'Design a weekly scheduled session prompt for automated dependency updates that is safe and thorough.',
                 hint: 'Think about: what to update, how to verify safety, what to do with breaking changes.',
                 idealAnswer: 'Check for outdated npm packages using `npm outdated`. Update all packages with minor and patch version bumps (do NOT update major versions). After updating:\n1. Run the full test suite (`npm test`)\n2. Run the build (`npm run build`)\n3. Run lint (`npm run lint`)\n\nIf all checks pass, create a PR titled "chore: weekly dependency updates [date]" with a list of updated packages and their version changes.\n\nIf any tests or builds fail after an update, revert that specific package to its previous version and note it in the PR description as "Skipped: [package] (breaks [test/build])".\n\nDo NOT update: packages listed in the DEPENDENCY_FREEZE section of package.json comments.'
+              },
+              {
+                id: 'ex-workflow-mcp',
+                type: 'scenario',
+                question: 'Write the prompt you would give to Devin for this scenario.',
+                scenario: 'Your team uses Slack for communication, Linear for project management, and GitHub for code. You want to set up an automated workflow where bug reports in Linear automatically get assigned to Devin, and Devin posts updates in a Slack channel. Describe how you would configure this.',
+                hint: 'Think about which integrations to enable and what the workflow looks like end-to-end.',
+                idealAnswer: 'Integration Setup:\n1. Enable the Linear integration in Devin Settings > Integrations. Configure it to auto-assign tickets with the "devin" label to Devin.\n2. Enable the Slack integration and connect the #devin-updates channel for notifications.\n3. Enable GitHub integration for the target repo.\n\nWorkflow:\n- When a bug ticket is created in Linear with the "devin" label, Devin automatically starts a session\n- Devin reads the ticket description, investigates the bug using Ask mode first\n- Devin implements the fix in Agent mode and creates a PR\n- Devin posts a summary in #devin-updates with the PR link and what was fixed\n- Devin Review runs on the PR and Auto-Fix addresses any review comments\n- Team reviews and merges the PR, Linear ticket auto-closes'
               },
               {
                 id: 'ex-workflow-2',
