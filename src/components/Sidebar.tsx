@@ -12,10 +12,14 @@ import {
   X,
   Sparkles,
   Award,
+  Flame,
+  Users,
+  TrendingUp,
 } from 'lucide-react';
 import { useState } from 'react';
 import { tracks } from '../data/curriculum';
 import { useProgress } from '../hooks/useProgress';
+import { getStreakData, getStreakEmoji } from '../lib/streaks';
 
 interface SidebarProps {
   isOpen: boolean;
@@ -55,11 +59,15 @@ export function Sidebar({ isOpen, onToggle }: SidebarProps) {
 
   const isActive = (path: string) => location.pathname === path;
 
+  const streakData = getStreakData();
+
   const navItems = [
     { path: '/', icon: <Home className="w-4 h-4" />, label: 'Dashboard' },
     { path: '/playground', icon: <Gamepad2 className="w-4 h-4" />, label: 'Playground' },
     { path: '/progress', icon: <BarChart3 className="w-4 h-4" />, label: 'Progress' },
     { path: '/certificates', icon: <Award className="w-4 h-4" />, label: 'Certificates' },
+    { path: '/stats', icon: <TrendingUp className="w-4 h-4" />, label: 'Stats' },
+    { path: '/gallery', icon: <Users className="w-4 h-4" />, label: 'Gallery' },
   ];
 
   return (
@@ -98,6 +106,16 @@ export function Sidebar({ isOpen, onToggle }: SidebarProps) {
             </div>
           </Link>
         </div>
+
+        {/* Streak Badge */}
+        {streakData.currentStreak > 0 && (
+          <div className="mx-4 mt-4 px-3 py-2 rounded-lg bg-orange-500/10 border border-orange-500/20 flex items-center gap-2">
+            <Flame className="w-4 h-4 text-orange-400" />
+            <span className="text-xs text-orange-300 font-medium">
+              {streakData.currentStreak} day streak {getStreakEmoji(streakData.currentStreak)}
+            </span>
+          </div>
+        )}
 
         {/* Main Navigation */}
         <nav className="p-4">

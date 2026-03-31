@@ -11,6 +11,11 @@ import {
   GraduationCap,
   BookOpen,
   Rocket,
+  Twitter,
+  Copy,
+  UserPlus,
+  QrCode,
+  Shield,
 } from 'lucide-react';
 import { Certificate } from '../components/Certificate';
 import { useCertificates } from '../hooks/useCertificates';
@@ -19,6 +24,8 @@ import { tracks } from '../data/curriculum';
 import { toPng } from 'html-to-image';
 import { sendCertificateEmail, isEmailJSConfigured } from '../lib/emailService';
 import { generateLinkedInShareUrl } from '../lib/linkedinShare';
+import { generateTwitterShareUrl, copyToClipboard, generateChallengeUrl } from '../lib/sharing';
+import { tierConfig } from '../lib/certificateId';
 
 const trackIcons: Record<string, React.ReactNode> = {
   beginner: <GraduationCap className="w-5 h-5" />,
@@ -34,6 +41,7 @@ const trackBgColors: Record<string, string> = {
 
 export function CertificatesPage() {
   const { certificates, markEmailSent, markLinkedInShared } = useCertificates();
+  const [copiedTrack, setCopiedTrack] = useState<string | null>(null);
   const { getTrackProgress } = useProgress();
   const certificateRefs = useRef<Record<string, HTMLDivElement | null>>({});
   const [downloadingTrack, setDownloadingTrack] = useState<string | null>(null);
@@ -210,9 +218,70 @@ export function CertificatesPage() {
                       style={{ background: 'linear-gradient(to right, #7485CA 0%, #81B7D4 46%, #85C4C0 100%)' }}
                     >
                       <Linkedin className="w-4 h-4" />
-                      Share on LinkedIn
+                      LinkedIn
                       <ExternalLink className="w-3 h-3" />
                     </button>
+
+                    <button
+                      onClick={() => {
+                        const url = generateTwitterShareUrl({ trackTitle: cert.trackTitle, trackLevel: cert.trackLevel, recipientName: cert.recipientName, certificateId: cert.certificateId });
+                        window.open(url, '_blank', 'noopener,noreferrer');
+                      }}
+                      className="flex items-center gap-2 px-4 py-2 rounded-lg border border-cognition-dark03 text-cognition-light01 hover:bg-cognition-dark03/50 transition-colors text-sm"
+                    >
+                      <Twitter className="w-4 h-4" />
+                      Twitter
+                    </button>
+
+                    <button
+                      onClick={async () => {
+                        const certUrl = `${window.location.origin}/certificate/${cert.certificateId}`;
+                        await copyToClipboard(certUrl);
+                        setCopiedTrack(cert.trackId);
+                        setTimeout(() => setCopiedTrack(null), 2000);
+                      }}
+                      className={`flex items-center gap-2 px-4 py-2 rounded-lg text-sm transition-colors ${
+                        copiedTrack === cert.trackId
+                          ? 'bg-cognition-accent02/20 text-cognition-accent02 border border-cognition-accent02/30'
+                          : 'border border-cognition-dark03 text-cognition-light01 hover:bg-cognition-dark03/50'
+                      }`}
+                    >
+                      {copiedTrack === cert.trackId ? <CheckCircle2 className="w-4 h-4" /> : <Copy className="w-4 h-4" />}
+                      {copiedTrack === cert.trackId ? 'Copied!' : 'Copy Link'}
+                    </button>
+
+                    <button
+                      onClick={() => {
+                        const url = generateChallengeUrl({ trackTitle: cert.trackTitle, trackLevel: cert.trackLevel, recipientName: cert.recipientName, certificateId: cert.certificateId });
+                        window.open(url, '_blank', 'noopener,noreferrer');
+                      }}
+                      className="flex items-center gap-2 px-4 py-2 rounded-lg border border-cognition-dark03 text-cognition-light01 hover:bg-cognition-dark03/50 transition-colors text-sm"
+                    >
+                      <UserPlus className="w-4 h-4" />
+                      Challenge Friend
+                    </button>
+                  </div>
+
+                  {/* Tier & Certificate ID */}
+                  <div className="flex items-center gap-3 mt-4 pt-4 border-t border-cognition-dark03">
+                    {cert.tier && (
+                      <span className="flex items-center gap-1.5 px-2.5 py-1 rounded-full text-xs font-medium" style={{ backgroundColor: `${tierConfig[cert.tier].color}20`, color: tierConfig[cert.tier].color }}>
+                        <Shield className="w-3 h-3" />
+                        {tierConfig[cert.tier].badgeEmoji} {tierConfig[cert.tier].label}
+                      </span>
+                    )}
+                    {cert.certificateId && (
+                      <span className="flex items-center gap-1.5 text-xs text-cognition-grey02">
+                        <QrCode className="w-3 h-3" />
+                        ID: {cert.certificateId.slice(0, 12)}...
+                      </span>
+                    )}
+                    <Link
+                      to={`/certificate/${cert.certificateId}`}
+                      className="text-xs text-cognition-accent01 hover:underline ml-auto"
+                    >
+                      View Public Page
+                    </Link>
                   </div>
                 </div>
               </div>

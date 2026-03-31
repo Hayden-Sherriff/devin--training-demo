@@ -18,6 +18,10 @@ export interface CertificateEmailParams {
   linkedinShareUrl: string;
   trainingUrl: string;
   certificateImageUrl?: string;
+  certificateId?: string;
+  tier?: string;
+  expirationDate?: string;
+  certificateViewUrl?: string;
 }
 
 export function isEmailJSConfigured(): boolean {
@@ -40,6 +44,11 @@ export async function sendCertificateEmail(params: CertificateEmailParams): Prom
       linkedin_share_url: params.linkedinShareUrl,
       training_url: params.trainingUrl,
       certificate_image_url: params.certificateImageUrl || '',
+      certificate_id: params.certificateId || '',
+      tier: params.tier || '',
+      expiration_date: params.expirationDate || '',
+      certificate_view_url: params.certificateViewUrl || '',
+      linkedin_badge_tip: 'Add this certification to your LinkedIn profile: Go to your LinkedIn profile > Add profile section > Licenses & certifications. Use "Devin Academy" as the issuing organization and your certificate ID as the credential ID.',
     };
 
     await emailjs.send(
